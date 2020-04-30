@@ -19,7 +19,6 @@ target/
 ######################
 
 *.iml
-*.xml
 .idea/
 ## Plugin-specific files:
 # IntelliJ
