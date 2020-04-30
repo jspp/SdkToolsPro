@@ -1,0 +1,32 @@
+######################
+# 解决java产生文件
+######################
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+######################
+# 解决maven产生的文件
+######################
+
+target/
+**/target/
+######################
+# 解决各类编辑器自动产生的文件
+######################
+
+*.iml
+*.xml
+.idea/
+## Plugin-specific files:
+# IntelliJ
+/out/
+/target/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+.log
