@@ -58,29 +58,4 @@ public class MixGameTask extends Task<Integer> {
             this.choiceGame = choiceGame;
             this.face = face;
     }
-
-    static class StreamGobbler extends Thread {
-        InputStream is;
-        String type;
-        MixController face;
-        StreamGobbler(InputStream is, String type,MixController face) {
-            this.is = is;
-            this.type = type;
-            this.face = face;
-        }
-        public void run() {
-            try {
-                InputStreamReader isr = new InputStreamReader(is,"GBK");
-                System.out.println(1);
-                BufferedReader br = new BufferedReader(isr);
-                String line = null;
-                while ((line = br.readLine()) != null){
-                    System.out.println(type + ">" + line);
-                    face.showLog(type + ">" + line);
-                }
-            } catch (Exception ioe) {
-                ioe.printStackTrace();
-            }
-        }
-    }
 }

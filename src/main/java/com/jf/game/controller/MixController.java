@@ -559,16 +559,7 @@ public class MixController extends BaseController implements Initializable {
      */
     @FXML
     public void backMain() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/layout/subpackage.fxml"));
-            ApplicationContext.primaryStage.setScene(new Scene(root, 470, 400));
-            ApplicationContext.primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/imgs/20180724111034.png")));
-            ApplicationContext.primaryStage.setResizable(false);
-            ApplicationContext.primaryStage.setTitle(ApplicationContext.softName);
-            ApplicationContext.primaryStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        backToIndexPage();
     }
 
     public void showLog(String info){

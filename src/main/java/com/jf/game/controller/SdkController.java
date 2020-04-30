@@ -15,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
@@ -98,7 +99,24 @@ public class SdkController extends BaseController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    /**
+     * 去到一键签名页面
+     * @param event
+     */
+    @FXML
+    public void toSignApk(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/layout/sign_apk.fxml"));
+            ApplicationContext.primaryStage.setScene(new Scene(root, 470, 400));
+            ApplicationContext.primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/imgs/20180724111034.png")));
+            ApplicationContext.primaryStage.setResizable(false);
+            ApplicationContext.primaryStage.setTitle("一键签名");
+            ApplicationContext.primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     /**
      * 分包
