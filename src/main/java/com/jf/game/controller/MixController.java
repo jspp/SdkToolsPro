@@ -1,24 +1,5 @@
 package com.jf.game.controller;
 
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.Stage;
-import javafx.util.StringConverter;
-import org.dom4j.Element;
-import org.dom4j.Node;
-import com.jf.game.Main;
 import com.jf.game.config.ApplicationContext;
 import com.jf.game.config.ScreenDirection;
 import com.jf.game.config.SdkVersion;
@@ -30,6 +11,22 @@ import com.jf.game.support.InitGameDataTask;
 import com.jf.game.support.MixGameTask;
 import com.jf.game.support.ProgressFrom;
 import com.jf.game.utils.DateUtil;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
+import javafx.util.StringConverter;
+import org.dom4j.Element;
+import org.dom4j.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +36,7 @@ import java.util.Random;
 import java.util.ResourceBundle;
 
 public class MixController extends BaseController implements Initializable {
+    static Logger logger = LoggerFactory.getLogger(MixController.class);
     /**
      * 反编译的游戏文件夹
      */
@@ -58,7 +56,7 @@ public class MixController extends BaseController implements Initializable {
     //换行
     static  String newLine = "    \n ";
     // 融合基础的目录
-    public  static  String baseFilePath = "E:\\sdk_tools_202004";
+    public  static  String baseFilePath = "D:\\aaa_sdk";
     // 项目类型 单选组
     final ToggleGroup group_project = new ToggleGroup();
     @FXML
@@ -225,7 +223,7 @@ public class MixController extends BaseController implements Initializable {
             showLog("元文件夹名称： "+gameDirName+"   融合后的APK名称为："+gameApkName);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("当前操作出错了",e);
             super.errorAlert("当前操作出bug了 ", e);
         }
     }
@@ -270,7 +268,7 @@ public class MixController extends BaseController implements Initializable {
             buildApp(gameDirName,gameApkName,baseFilePath);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("当前操作出错了",e);
             super.errorAlert(" 当前操作出bug了 ", e);
         }
     }
@@ -386,7 +384,7 @@ public class MixController extends BaseController implements Initializable {
      * @Date: 2020/4/28 16:11
      */
     void printAndShowLog(String msg) {
-        System.out.println(msg);
+        logger.error("=======>"+msg);
         showLog(msg);
     }
 

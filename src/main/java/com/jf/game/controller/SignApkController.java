@@ -21,7 +21,7 @@ public class SignApkController extends BaseController implements Initializable {
     private String filePath;
     @FXML
     private Button signButton;
-    Logger logger = LoggerFactory.getLogger(SignApkController.class);
+    static  Logger logger = LoggerFactory.getLogger(SignApkController.class);
     /**
      * 选择文件
      *
@@ -38,7 +38,7 @@ public class SignApkController extends BaseController implements Initializable {
             try {
                 filePath = file.getPath();
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("选择文件出错了",e);
             }
         }
     }
@@ -59,9 +59,36 @@ public class SignApkController extends BaseController implements Initializable {
     @FXML
     public void startSign(ActionEvent event) {
         try {
-            logger.info(" startSign 开始签名文件...................");
-            File dir = new File(getClass().getResource("/signJavaRunTime/bin").getPath());//此处是指定路径
-            String[] cmd = new String[] { "cmd", "/c", "jarsigner.exe -verbose -keystore E:\\aaa_sdk_tools\\android\\GameLeveling.keystore -storepass \"3yx.com\" -keypass \"3yx.com\" -signedjar E:\\sdk_tools_202004\\1111234signed.apk E:\\sdk_tools_202004\\Pipiwan341_792_nosign.apk gameleveling"};// cmd[2]是要执行的dos命令
+            String filePathStr = filePath;
+            if (filePathStr == null || filePathStr.length() == 0) {
+                super.alert("没选择游戏包，赐不了你签名。");
+                return;
+            }
+            if (!filePathStr.endsWith("apk")) {
+                super.alert("不是APK文件，赐不了你签名。");
+                return;
+            }
+            logger.info(" startSign 开始签名文件..................."+filePath);
+            // E:\sdk_tools_202004\Pipiwan341_792_nosign.apk
+            String sourceFileName = "";
+            String sourceFilePath="";// 源文件存储路径 默认带斜杠
+            String newFileName = "";
+            String baseConfigPath = getClass().getResource("/signJavaRunTime/").getPath();
+            if(filePathStr.contains("\\")){
+                sourceFilePath = filePathStr.substring(0,filePathStr.lastIndexOf("\\")+1);
+                sourceFileName = filePathStr.substring(filePathStr.lastIndexOf("\\")-1,filePathStr.length());
+            }
+            logger.info("解析文件路径完毕..................."+sourceFileName+" "+sourceFilePath);
+            File dir = new File(baseConfigPath+"/bin");//此处是指定路径
+            String[] cmd = new String[] { "cmd", "/c",
+                    "jarsigner.exe -verbose " +
+                    "-keystore " + baseConfigPath+"/GameLeveling.keystore " +
+                    "-storepass 3yx.com " +
+                    "-keypass 3yx.com " +
+                    "-signedjar "+sourceFilePath+newFileName+" " +
+                    filePathStr+" " +
+                    "gameleveling"};// cmd[2]是要执行的dos命令
+            logger.info(" 签名命令组装完成..............."+cmd.toString());
             Process process = Runtime.getRuntime().exec(cmd,null,dir);
             // any error message?
             StreamGobbler errorGobbler = new StreamGobbler(process.getErrorStream(), "ERROR",this);

@@ -1,5 +1,12 @@
 package com.jf.game.controller;
 
+import com.jf.game.config.ApplicationContext;
+import com.jf.game.pojo.Game;
+import com.jf.game.subPackage.ApkUtils;
+import com.jf.game.support.AutoCompleteComboBoxListener;
+import com.jf.game.support.InitGameDataTask;
+import com.jf.game.support.ProgressFrom;
+import com.jf.game.utils.DateUtil;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,14 +28,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import com.jf.game.Main;
-import com.jf.game.config.ApplicationContext;
-import com.jf.game.pojo.Game;
-import com.jf.game.subPackage.ApkUtils;
-import com.jf.game.support.AutoCompleteComboBoxListener;
-import com.jf.game.support.InitGameDataTask;
-import com.jf.game.support.ProgressFrom;
-import com.jf.game.utils.DateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.io.File;
@@ -37,7 +38,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class SdkController extends BaseController implements Initializable {
-
+    static Logger logger = LoggerFactory.getLogger(SdkController.class);
     @FXML
     private ComboBox choiceGame;
 
@@ -78,7 +79,7 @@ public class SdkController extends BaseController implements Initializable {
             try {
                 filePath = file.getPath();
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error(" 操作出错了 ",e);
             }
         }
     }
@@ -97,7 +98,7 @@ public class SdkController extends BaseController implements Initializable {
             ApplicationContext.primaryStage.setScene(new Scene(root, 895, 625));
             ApplicationContext.primaryStage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(" 操作出错了 ",e);
         }
     }
 
@@ -109,13 +110,13 @@ public class SdkController extends BaseController implements Initializable {
     public void toSignApk(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/layout/sign_apk.fxml"));
-            ApplicationContext.primaryStage.setScene(new Scene(root, 470, 400));
+            ApplicationContext.primaryStage.setScene(new Scene(root, 460, 194));
             ApplicationContext.primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/imgs/20180724111034.png")));
             ApplicationContext.primaryStage.setResizable(false);
             ApplicationContext.primaryStage.setTitle("一键签名");
             ApplicationContext.primaryStage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(" 操作出错了 ",e);
         }
     }
     /**
@@ -166,6 +167,7 @@ public class SdkController extends BaseController implements Initializable {
             Desktop.getDesktop().open(new File(basepackagePath));
         } catch (Exception e) {
             super.alert("出bug了"+e.getMessage());
+            logger.error(" 操作出错了 ",e);
         }
     }
 
