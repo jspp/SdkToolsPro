@@ -37,8 +37,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class SdkController extends BaseController implements Initializable {
-    static Logger logger = LoggerFactory.getLogger(SdkController.class);
+public class SubpackageController extends BaseController implements Initializable {
+    static Logger logger = LoggerFactory.getLogger(SubpackageController.class);
     @FXML
     private ComboBox choiceGame;
 
@@ -114,6 +114,23 @@ public class SdkController extends BaseController implements Initializable {
             ApplicationContext.primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/imgs/20180724111034.png")));
             ApplicationContext.primaryStage.setResizable(false);
             ApplicationContext.primaryStage.setTitle("一键签名");
+            ApplicationContext.primaryStage.show();
+        } catch (IOException e) {
+            logger.error(" 操作出错了 ",e);
+        }
+    }
+    /**
+     *  apk tools 打包
+     * @param event
+     */
+    @FXML
+    public void toApkTools(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/layout/apktools_package.fxml"));
+            ApplicationContext.primaryStage.setScene(new Scene(root, 460, 194));
+            ApplicationContext.primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/imgs/20180724111034.png")));
+            ApplicationContext.primaryStage.setResizable(false);
+            ApplicationContext.primaryStage.setTitle("Apktools 打包");
             ApplicationContext.primaryStage.show();
         } catch (IOException e) {
             logger.error(" 操作出错了 ",e);

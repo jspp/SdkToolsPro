@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="292.0" prefWidth="490.0" xmlns="http://javafx.com/javafx/8.0.91" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jf.game.controller.SdkController">
+<AnchorPane prefHeight="292.0" prefWidth="490.0" xmlns="http://javafx.com/javafx/8.0.91" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jf.game.controller.SubpackageController">
         <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="416.0" prefWidth="519.0" styleClass="panel,panel-default" stylesheets="bootstrapfx.css">
                 <Label layoutX="92.0" layoutY="47.0" text="选择项目：" />
                 <RadioButton fx:id="egame" layoutX="179.0" layoutY="48.0" mnemonicParsing="false" selected="true" text="皮皮玩手游" textFill="#f90c1e" />
@@ -28,8 +28,10 @@
 
                 <Text fill="#433c3c" layoutX="183.0" layoutY="337.0" strokeType="OUTSIDE" strokeWidth="0.0" text="有更好的Idea？ @Auth: jspp@qq.com" />
 
-                <Hyperlink id="mixGame" layoutX="251.0" layoutY="357.0" onAction="#toMix" text="融合游戏" />
+                <Hyperlink id="mixGame" layoutX="100.0" layoutY="357.0" onAction="#toMix" text="融合游戏" />
 
-                <Hyperlink id="signApk" layoutX="340.0" layoutY="357.0" onAction="#toSignApk" text="一键签名" />
+                <Hyperlink id="signApk" layoutX="200.0" layoutY="357.0" onAction="#toSignApk" text="一键签名" />
+
+                <Hyperlink id="signApk" layoutX="300.0" layoutY="357.0" onAction="#toApkTools" text="ApkTools打包" />
         </Pane>
 </AnchorPane>

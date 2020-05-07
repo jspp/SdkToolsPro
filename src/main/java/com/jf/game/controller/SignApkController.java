@@ -131,7 +131,6 @@ public class SignApkController extends BaseController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // 初始化上次 选择APK 的路径 是否还存在
-        PropertiesUtil.load("global.properties");
         logger.info(" SignApkController 初始化完毕...................");
     }
 

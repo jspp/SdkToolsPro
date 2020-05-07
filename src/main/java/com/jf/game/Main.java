@@ -26,7 +26,8 @@ public class Main extends Application {
             primaryStage.setResizable(false);
             ApplicationContext.primaryStage = primaryStage;
             primaryStage.show();
-
+            // 初始化 配置信息
+            PropertiesUtil.load("global.properties");
         } catch (Exception e) {
             e.printStackTrace();
         }
