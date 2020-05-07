@@ -79,7 +79,7 @@ public class SignApkController extends BaseController implements Initializable {
             String newFileAlignName = "";
             String newFileFullPath_sign = "";
             String newFileFullPath_align = "";
-            String baseConfigPath = PropertiesUtil.getValue("sign.jar.path");
+            String baseConfigPath = PropertiesUtil.getValue("sign.jre.path");
             logger.info(" start baseConfigPath={}...................",baseConfigPath);
             if(sourcefilePathStr.contains("\\")){
                 sourceFilePath = sourcefilePathStr.substring(0,sourcefilePathStr.lastIndexOf("\\")+1);
