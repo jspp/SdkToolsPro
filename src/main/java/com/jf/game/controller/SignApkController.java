@@ -1,6 +1,8 @@
 package com.jf.game.controller;
 
 import com.jf.game.support.StreamGobbler;
+import com.jf.game.utils.DateUtil;
+import com.jf.game.utils.PropertiesUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class SignApkController extends BaseController implements Initializable {
@@ -59,12 +62,12 @@ public class SignApkController extends BaseController implements Initializable {
     @FXML
     public void startSign(ActionEvent event) {
         try {
-            String filePathStr = filePath;
-            if (filePathStr == null || filePathStr.length() == 0) {
+            String sourcefilePathStr = filePath;
+            if (sourcefilePathStr == null || sourcefilePathStr.length() == 0) {
                 super.alert("没选择游戏包，赐不了你签名。");
                 return;
             }
-            if (!filePathStr.endsWith("apk")) {
+            if (!sourcefilePathStr.endsWith("apk")) {
                 super.alert("不是APK文件，赐不了你签名。");
                 return;
             }
@@ -72,23 +75,35 @@ public class SignApkController extends BaseController implements Initializable {
             // E:\sdk_tools_202004\Pipiwan341_792_nosign.apk
             String sourceFileName = "";
             String sourceFilePath="";// 源文件存储路径 默认带斜杠
-            String newFileName = "";
-            String baseConfigPath = getClass().getResource("/signJavaRunTime/").getPath();
-            if(filePathStr.contains("\\")){
-                sourceFilePath = filePathStr.substring(0,filePathStr.lastIndexOf("\\")+1);
-                sourceFileName = filePathStr.substring(filePathStr.lastIndexOf("\\")-1,filePathStr.length());
+            String newSignedFileName = "";
+            String newFileAlignName = "";
+            String newFileFullPath_sign = "";
+            String newFileFullPath_align = "";
+            String baseConfigPath = PropertiesUtil.getValue("sign.jar.path");
+            logger.info(" start baseConfigPath={}...................",baseConfigPath);
+            if(sourcefilePathStr.contains("\\")){
+                sourceFilePath = sourcefilePathStr.substring(0,sourcefilePathStr.lastIndexOf("\\")+1);
+                sourceFileName = sourcefilePathStr.substring(sourcefilePathStr.lastIndexOf("\\")+1,sourcefilePathStr.length());
             }
-            logger.info("解析文件路径完毕..................."+sourceFileName+" "+sourceFilePath);
-            File dir = new File(baseConfigPath+"/bin");//此处是指定路径
+            logger.info("解析文件01........sourceFileName={}=====........",sourceFileName);
+            newSignedFileName = sourceFileName.substring(0,sourceFileName.lastIndexOf("."))+"signed_"+ DateUtil.getCurrentDateTime("MMddHHmmss") +".apk";
+            newFileAlignName = sourceFileName.substring(0,sourceFileName.lastIndexOf("."))+"signed_align"+ DateUtil.getCurrentDateTime("MMddHHmmss") +".apk";
+            newFileFullPath_sign = sourceFilePath+newSignedFileName;
+            newFileFullPath_align = sourceFilePath+newFileAlignName;
+            logger.info("解析文件路径完毕02..................."+sourceFileName+" "+sourceFilePath);
+            File dir = new File(baseConfigPath+"bin");//此处是指定路径
             String[] cmd = new String[] { "cmd", "/c",
                     "jarsigner.exe -verbose " +
                     "-keystore " + baseConfigPath+"/GameLeveling.keystore " +
                     "-storepass 3yx.com " +
                     "-keypass 3yx.com " +
-                    "-signedjar "+sourceFilePath+newFileName+" " +
-                    filePathStr+" " +
-                    "gameleveling"};// cmd[2]是要执行的dos命令
-            logger.info(" 签名命令组装完成..............."+cmd.toString());
+                    "-signedjar "+newFileFullPath_sign+" " +
+                            sourcefilePathStr+" " +
+                    "gameleveling"+
+                    " & zipalign.exe -f -v 4 " +
+                            newFileFullPath_sign+" " +
+                            newFileFullPath_align};
+            logger.info(" 签名命令组装完成..............."+ Arrays.toString(cmd));
             Process process = Runtime.getRuntime().exec(cmd,null,dir);
             // any error message?
             StreamGobbler errorGobbler = new StreamGobbler(process.getErrorStream(), "ERROR",this);
@@ -97,8 +112,13 @@ public class SignApkController extends BaseController implements Initializable {
             // kick them off
             errorGobbler.start();
             outputGobbler.start();
-            process.waitFor();  //等待执行完成
-        } catch (Exception e) {
+            int rss = process.waitFor();  //等待执行完成
+            if(rss==0){
+                super.alert("签名对齐 完成");
+            }else {
+                super.alert("签名操作失败，请查看日志信息。");
+            }
+        } catch (Throwable e) {
             logger.error(" 签名执行出错",e);
         }
     }
@@ -111,6 +131,7 @@ public class SignApkController extends BaseController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // 初始化上次 选择APK 的路径 是否还存在
+        PropertiesUtil.load("global.properties");
         logger.info(" SignApkController 初始化完毕...................");
     }
 

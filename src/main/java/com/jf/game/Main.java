@@ -1,5 +1,7 @@
 package com.jf.game;
 
+import com.jf.game.config.ApplicationContext;
+import com.jf.game.utils.PropertiesUtil;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import com.jf.game.config.ApplicationContext;
 
 public class Main extends Application {
 
@@ -25,6 +26,7 @@ public class Main extends Application {
             primaryStage.setResizable(false);
             ApplicationContext.primaryStage = primaryStage;
             primaryStage.show();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -56,7 +56,7 @@ public class MixController extends BaseController implements Initializable {
     //换行
     static  String newLine = "    \n ";
     // 融合基础的目录
-    public  static  String baseFilePath = "D:\\aaa_sdk";
+    public  static  String baseFilePath = "E:\\sdk_tools_202004";
     // 项目类型 单选组
     final ToggleGroup group_project = new ToggleGroup();
     @FXML
