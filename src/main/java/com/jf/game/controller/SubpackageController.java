@@ -196,9 +196,17 @@ public class SubpackageController extends BaseController implements Initializabl
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ObservableList<Game> list = FXCollections.observableArrayList(ApplicationContext.getGameList());
-        choiceGame.getItems().addAll(list);
-/*        Game initGame = new Game();
+    /*    Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                ObservableList<Game> list = FXCollections.observableArrayList(ApplicationContext.getGameList());
+                choiceGame.getItems().addAll(list);
+            }
+        });*/
+        InitGameDataTask initGameDataTask = new InitGameDataTask(choiceGame,"egame");
+        new Thread(initGameDataTask).start();
+
+/*      Game initGame = new Game();
         initGame.setGameId("");
         initGame.setGameName("请选择游戏");
         choiceGame.setValue(initGame);*/
