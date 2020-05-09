@@ -1,21 +1,27 @@
 package com.jf.game.controller;
 
+import com.jf.game.subPackage.FileUtil;
 import com.jf.game.support.StreamGobbler;
 import com.jf.game.utils.DateUtil;
 import com.jf.game.utils.PropertiesUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.*;
 import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class SignApkController extends BaseController implements Initializable {
@@ -87,7 +93,7 @@ public class SignApkController extends BaseController implements Initializable {
             }
             logger.info("解析文件01........sourceFileName={}=====........",sourceFileName);
             newSignedFileName = sourceFileName.substring(0,sourceFileName.lastIndexOf("."))+"signed_"+ DateUtil.getCurrentDateTime("MMddHHmmss") +".apk";
-            newFileAlignName = sourceFileName.substring(0,sourceFileName.lastIndexOf("."))+"signed_align"+ DateUtil.getCurrentDateTime("MMddHHmmss") +".apk";
+            newFileAlignName = sourceFileName.substring(0,sourceFileName.lastIndexOf("."))+"_ssa_"+ DateUtil.getCurrentDateTime("ddHHmmss") +".apk";
             newFileFullPath_sign = sourceFilePath+newSignedFileName;
             newFileFullPath_align = sourceFilePath+newFileAlignName;
             logger.info("解析文件路径完毕02..................."+sourceFileName+" "+sourceFilePath);
@@ -114,10 +120,24 @@ public class SignApkController extends BaseController implements Initializable {
             outputGobbler.start();
             int rss = process.waitFor();  //等待执行完成
             if(rss==0){
-                super.alert("签名对齐 完成");
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("系统提示");
+                alert.setHeaderText("签名结果");
+                alert.setContentText(" 【成功】签名成功了，是否直接打开对应文件夹. ");
+                alert.initStyle(StageStyle.UTILITY);
+                Optional result = alert.showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    logger.info(" 准备删除 签名初始文件 (未对齐) ");
+                    FileUtil.deleteFile(newFileFullPath_sign);
+                    File newApkPath = new File(newFileFullPath_align);
+                    Desktop.getDesktop().open(newApkPath.getParentFile());
+                } else {
+                    logger.info(" 签名完毕，不需要打开文件夹 ");
+                }
             }else {
                 super.alert("签名操作失败，请查看日志信息。");
             }
+
         } catch (Throwable e) {
             logger.error(" 签名执行出错",e);
         }
