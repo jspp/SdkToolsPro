@@ -30,6 +30,8 @@ public class SignApkController extends BaseController implements Initializable {
     private ComboBox choiceGame;
     private String filePath;
     @FXML
+    private Button fileButton;
+    @FXML
     private Button signButton;
     static  Logger logger = LoggerFactory.getLogger(SignApkController.class);
     /**
@@ -51,6 +53,9 @@ public class SignApkController extends BaseController implements Initializable {
         if (file != null) {
             try {
                 filePath = file.getPath();
+                Optional.ofNullable(filePath).ifPresent(path->{
+                    fileButton.setText(filePath);
+                });
             } catch (Exception e) {
                 logger.error("选择文件出错了",e);
             }

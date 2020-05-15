@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -25,6 +26,8 @@ public class ApktoolsController extends BaseController implements Initializable 
     @FXML
     private ComboBox choiceGame;
     private String filePath;
+    @FXML
+    private Button fileButton;
     @FXML
     private Button signButton;
     static  Logger logger = LoggerFactory.getLogger(ApktoolsController.class);
@@ -46,6 +49,9 @@ public class ApktoolsController extends BaseController implements Initializable 
         if (file != null) {
             try {
                 filePath = file.getPath();
+                Optional.ofNullable(filePath).ifPresent(path->{
+                    fileButton.setText(filePath);
+                });
             } catch (Exception e) {
                 logger.error("选择文件出错了",e);
             }
