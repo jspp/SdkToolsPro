@@ -14,6 +14,7 @@ import javafx.scene.control.ComboBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +40,10 @@ public class SignApkController extends BaseController implements Initializable {
     @FXML
     public void chooseFile(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
+        String basePath = PropertiesUtil.getValue("base.work.path");
+        if(StringUtils.isNotBlank(basePath)){
+            fileChooser.setInitialDirectory(new File(basePath));
+        }
         fileChooser.setTitle("请选择APK文件，老铁别看错了，目前分包只支持 Android");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.apk"));
         Stage selectFile = new Stage();

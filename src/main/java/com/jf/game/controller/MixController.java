@@ -11,6 +11,7 @@ import com.jf.game.support.InitGameDataTask;
 import com.jf.game.support.MixGameTask;
 import com.jf.game.support.ProgressFrom;
 import com.jf.game.utils.DateUtil;
+import com.jf.game.utils.PropertiesUtil;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,6 +24,7 @@ import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import org.apache.commons.lang.StringUtils;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.slf4j.Logger;
@@ -90,6 +92,10 @@ public class MixController extends BaseController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        String basePath = PropertiesUtil.getValue("mix.work.path");
+        if(StringUtils.isNotBlank(basePath)){
+            baseFilePath = basePath;
+        }
         logInfo.appendText(" 融合游戏比较耗资源（有点卡）。请保证你的磁盘空间足够。"+newLine );
         logInfo.appendText(" 4.3.0 版本发布了 "+newLine+"1、修复浮点问题"+newLine+" 2、优化游戏包更新... " +newLine);
         logInfo.appendText(newLine );
