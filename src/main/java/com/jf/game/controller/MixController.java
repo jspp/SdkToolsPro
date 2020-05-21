@@ -6,17 +6,13 @@ import com.jf.game.config.SdkVersion;
 import com.jf.game.pojo.Game;
 import com.jf.game.subPackage.FileUtil;
 import com.jf.game.subPackage.XmlUtils;
-import com.jf.game.support.AutoCompleteComboBoxListener;
-import com.jf.game.support.InitGameDataTask;
-import com.jf.game.support.MixGameTask;
-import com.jf.game.support.ProgressFrom;
+import com.jf.game.support.*;
 import com.jf.game.utils.DateUtil;
 import com.jf.game.utils.PropertiesUtil;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -100,9 +96,10 @@ public class MixController extends BaseController implements Initializable {
         logInfo.appendText(" 4.3.0 版本发布了 "+newLine+"1、修复浮点问题"+newLine+" 2、优化游戏包更新... " +newLine);
         logInfo.appendText(newLine );
 
+        // 异步初始化数据
+        InitGameDataTask initGameDataTask = new InitGameDataTask(choiceGame,ApplicationContext.defaultType);
+        new Thread(initGameDataTask).start();
 
-        ObservableList<Game> list = FXCollections.observableArrayList(ApplicationContext.getGameList());
-        choiceGame.getItems().addAll(list);
         choiceGame.converterProperty().set(new StringConverter<Game>() {
             @Override
             public String toString(Game object) {
@@ -261,17 +258,20 @@ public class MixController extends BaseController implements Initializable {
 
             // 游戏解压或的目录名称
             String gameDirName = gameDirPath;
-            if(gameDirPath.contains("\\")){
+            /*if(gameDirPath.contains("\\")){
                 gameDirName = gameDirPath.substring(gameDirPath.lastIndexOf("\\")+1,gameDirPath.length());
-            }
+            }*/
             // 游戏打包后的 APK 名称
-            String gameApkName = gameDirName+ DateUtil.getCurrentDateTime("yyyyMMdd")+ new Random().nextInt(100) +".apk";
+            //String gameApkName = gameDirName+ DateUtil.getCurrentDateTime("yyyyMMdd")+ new Random().nextInt(100) +".apk";
 
-            printAndShowLog("元文件夹名称： "+gameDirName+"   融合后的APK名称为："+gameApkName);
+            printAndShowLog("元文件夹名称： "+gameDirName);
 
 
             printAndShowLog ("文件替换成功 开始打包 ");
-            buildApp(gameDirName,gameApkName,baseFilePath);
+
+            BuildByApktoolTask gameDataTask = new BuildByApktoolTask(gameDirName,this);
+            ProgressFrom progressFrom = new ProgressFrom(gameDataTask,ApplicationContext.primaryStage);
+            progressFrom.activateProgressBar();
 
         } catch (Exception e) {
             logger.error("当前操作出错了",e);
@@ -433,11 +433,11 @@ public class MixController extends BaseController implements Initializable {
         XmlUtils.wirte(root_game.getDocument(),gameDirPath + "/res/values/colors.xml");
     }
 
-    public   void buildApp(String sourceName,String targetName,String contextPath){
-        MixGameTask gameDataTask = new MixGameTask(sourceName,targetName,contextPath,choiceGame,this);
+/*    public   void buildAppByShaKatool(String sourceName,String targetName,String contextPath){
+        BuildByShakaTask gameDataTask = new BuildByShakaTask(sourceName,targetName,contextPath,choiceGame,this);
         ProgressFrom progressFrom = new ProgressFrom(gameDataTask,ApplicationContext.primaryStage);
         progressFrom.activateProgressBar();
-    }
+    }*/
 
     /**
      * 对应的事件
@@ -570,9 +570,9 @@ public class MixController extends BaseController implements Initializable {
         logInfo.appendText(info + newLine );
     }
 
-    public static void main(String[] args) {
+/*    public static void main(String[] args) {
         MixController mixController = new MixController();
-        mixController.buildApp("","","D:/aaa_sdk/");
-    }
+        mixController.buildAppByShaKatool("","","D:/aaa_sdk/");
+    }*/
 
 }

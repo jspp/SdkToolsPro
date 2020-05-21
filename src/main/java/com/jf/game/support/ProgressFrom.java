@@ -40,7 +40,7 @@ public class ProgressFrom {
         dialogStage.setY(primaryStage.getY()+primaryStage.getHeight()/2);
 
         // progress bar
-        Label label = new Label(" 数据加载中, 请稍后...");
+        Label label = new Label(" 拼命处理中...");
         label.setTextFill(Color.BLUE);
         //label.getStyleClass().add("progress-bar-root");
         progressIndicator.setProgress(-1F);

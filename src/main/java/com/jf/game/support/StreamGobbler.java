@@ -40,7 +40,7 @@ public class StreamGobbler extends Thread {
                     mFace.showLog(type + ">" + line);
                 }
             }
-        } catch (Exception ioe) {
+        } catch (Throwable ioe) {
             logger.error(" 日志输出执行出错",ioe);
         }
     }

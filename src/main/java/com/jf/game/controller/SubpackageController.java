@@ -203,7 +203,7 @@ public class SubpackageController extends BaseController implements Initializabl
                 choiceGame.getItems().addAll(list);
             }
         });*/
-        InitGameDataTask initGameDataTask = new InitGameDataTask(choiceGame,"egame");
+        InitGameDataTask initGameDataTask = new InitGameDataTask(choiceGame,ApplicationContext.defaultType);
         new Thread(initGameDataTask).start();
 
 /*      Game initGame = new Game();

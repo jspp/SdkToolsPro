@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
  * 2018/9/11
  * 18:02
  */
-public class MixGameTask extends Task<Integer> {
+public class BuildByShakaTask extends Task<Integer> {
 
 
     private String contextPath;
@@ -51,7 +51,7 @@ public class MixGameTask extends Task<Integer> {
         return 1;
     }
 
-    public MixGameTask(String sourceName, String targetName, String contextPath, ComboBox choiceGame, MixController face) {
+    public BuildByShakaTask(String sourceName, String targetName, String contextPath, ComboBox choiceGame, MixController face) {
             this.sourceName = sourceName;
             this.targetName = targetName;
             this.contextPath = contextPath;

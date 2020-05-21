@@ -1,6 +1,7 @@
 package com.jf.game.controller;
 
 import com.jf.game.subPackage.FileUtil;
+import com.jf.game.support.AlertUtils;
 import com.jf.game.support.StreamGobbler;
 import com.jf.game.utils.DateUtil;
 import com.jf.game.utils.PropertiesUtil;
@@ -130,11 +131,7 @@ public class SignApkController extends BaseController implements Initializable {
             outputGobbler.start();
             int rss = process.waitFor();  //等待执行完成
             if(rss==0){
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("系统提示");
-                alert.setHeaderText("签名结果");
-                alert.setContentText(" 【成功】签名成功了，是否直接打开对应文件夹. ");
-                alert.initStyle(StageStyle.UTILITY);
+                Alert alert = AlertUtils.confirm("【成功】签名成功了，是否直接打开对应文件夹.");
                 Optional result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
                     logger.info(" 准备删除 签名初始文件 (未对齐) ");

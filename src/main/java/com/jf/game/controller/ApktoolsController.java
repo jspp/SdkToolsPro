@@ -1,5 +1,6 @@
 package com.jf.game.controller;
 
+import com.jf.game.support.ApktoolsUtils;
 import com.jf.game.support.StreamGobbler;
 import com.jf.game.utils.PropertiesUtil;
 import javafx.event.ActionEvent;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Optional;
@@ -68,7 +70,7 @@ public class ApktoolsController extends BaseController implements Initializable 
         backToIndexPage();
     }
     /**
-     * 开始签名
+     * 开始打包
      * @param event
      */
     @FXML
@@ -79,32 +81,12 @@ public class ApktoolsController extends BaseController implements Initializable 
                 super.alert("没选择游戏包，无法开始打包。");
                 return;
             }
-            logger.info(" apktools 打包文件 文件..................."+filePath);
-            // E:\sdk_tools_202004\Pipiwan341_792_nosign.apk
-            String apktoolPath = PropertiesUtil.getValue("sign.apktools.path");
-            String apktoolName = PropertiesUtil.getValue("sign.apktools.jar.name");
-            File dir = new File(apktoolPath);//此处是指定路径
-            String[] cmd = new String[] { "cmd", "/c",
-                    "java -jar "+apktoolName+" b -f "+sourcefilePathStr};
-            logger.info(" 签名命令组装完成..............."+ Arrays.toString(cmd));
-            final Process process = Runtime.getRuntime().exec(cmd,null,dir);
-            // any error message?
-            StreamGobbler errorGobbler = new StreamGobbler(process.getErrorStream(), "ERROR", this);
-            // any output?
-            StreamGobbler outputGobbler = new StreamGobbler(process.getInputStream(), "OUTPUT",this);
-            // kick them off
-            errorGobbler.start();
-            outputGobbler.start();
-            int rss = process.waitFor();  //等待执行完成
-            if(rss==0){
-                alert("手动打包 完成","系统提示");
-            }else {
-                alert("手动打包，请查看日志信息。","系统提示");
-            }
+            ApktoolsUtils.buildAppByApktool(sourcefilePathStr,ApktoolsController.this);
         } catch (Throwable e) {
             logger.error(" 执行出错",e);
         }
     }
+
     /**
      * 初始化数据
      * @param location
