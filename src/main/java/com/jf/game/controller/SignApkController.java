@@ -134,7 +134,7 @@ public class SignApkController extends BaseController implements Initializable {
                 Alert alert = AlertUtils.confirm("【成功】签名成功了，是否直接打开对应文件夹.");
                 Optional result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
-                    logger.info(" 准备删除 签名初始文件 (未对齐) ");
+                    logger.info(" 准备删除 签名初始文件 ");
                     FileUtil.deleteFile(newFileFullPath_sign);
                     File newApkPath = new File(newFileFullPath_align);
                     Desktop.getDesktop().open(newApkPath.getParentFile());

@@ -36,7 +36,7 @@ public class ApplicationContext {
 
     static Map<String,List<Game>> dataCache = new HashMap<>();
 
-    public static String softName = "SDK分包签名估计.v2020.04.28";
+    public static String softName = "Android分包签名工具.v2020.04.28";
 
     /**
      * 获取游戏列表
